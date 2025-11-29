@@ -37,39 +37,37 @@ import nl.dionsegijn.konfetti.xml.KonfettiView;
 
 public class MainActivity extends AppCompatActivity {
 
-    // --- UI Views ---
+
     private ImageView bottle;
     private TextView timerText, bigCountdown, resultText;
     private RelativeLayout gameContainer;
     private KonfettiView konfettiView;
 
-    // --- Splash Views ---
     private View splashOverlay;
     private ImageView splashLogo;
     private TextView splashText;
 
-    // --- Logic Variables ---
     private boolean isSpinning = false;
-    private long gameDuration = 10000; // 10 seconds default
+    private long gameDuration = 10000;
     private final Random random = new Random();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // 1. Activate Edge-to-Edge (Full Screen Mode)
+
         EdgeToEdge.enable(this);
 
         setContentView(R.layout.activity_main);
 
-        // 2. Handle System Bars (Avoids notch/camera overlapping UI)
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.gameContainer), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-        // 3. Link Java Variables to XML IDs
+
         bottle = findViewById(R.id.bottleImage);
         timerText = findViewById(R.id.timerText);
         bigCountdown = findViewById(R.id.bigCountdownText);
@@ -82,10 +80,8 @@ public class MainActivity extends AppCompatActivity {
         splashLogo = findViewById(R.id.splashLogo);
         splashText = findViewById(R.id.splashText);
 
-        // 4. Start the Splash Screen Animation
         runSplashAnimation();
 
-        // 5. Setup Click Listeners
         menuBtn.setOnClickListener(v -> showSettingsDialog());
 
         bottle.setOnClickListener(v -> {
@@ -101,14 +97,11 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    // ==========================================
-    // LOGIC: LOADING SCREEN
-    // ==========================================
+
     private void runSplashAnimation() {
         String[] messages = {"Drink Responsibly", "Party Time!", "Loading Fun...", "Spin to Win!"};
         splashText.setText(messages[random.nextInt(messages.length)]);
 
-        // Pulsing Logo Animation
         ObjectAnimator scaleX = ObjectAnimator.ofFloat(splashLogo, "scaleX", 1f, 1.2f);
         ObjectAnimator scaleY = ObjectAnimator.ofFloat(splashLogo, "scaleY", 1f, 1.2f);
         scaleX.setRepeatCount(ObjectAnimator.INFINITE);
@@ -121,7 +114,6 @@ public class MainActivity extends AppCompatActivity {
         set.setDuration(800);
         set.start();
 
-        // Remove Splash Screen after 3 seconds
         new Handler(Looper.getMainLooper()).postDelayed(() -> splashOverlay.animate()
                 .alpha(0f)
                 .setDuration(500)
@@ -129,15 +121,12 @@ public class MainActivity extends AppCompatActivity {
                 .start(), 3000);
     }
 
-    // ==========================================
-    // LOGIC: THE GAME
-    // ==========================================
+
     private void startGame() {
         isSpinning = true;
         resultText.setVisibility(View.GONE);
         bigCountdown.setVisibility(View.GONE);
 
-        // Infinite Spin Animation
         RotateAnimation rotate = new RotateAnimation(0, 3600,
                 Animation.RELATIVE_TO_SELF, 0.5f,
                 Animation.RELATIVE_TO_SELF, 0.5f);
@@ -146,19 +135,15 @@ public class MainActivity extends AppCompatActivity {
         rotate.setInterpolator(new LinearInterpolator());
         bottle.startAnimation(rotate);
 
-        // Timer Logic
         new CountDownTimer(gameDuration, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 long seconds = millisUntilFinished / 1000;
-                // Fix: Use resource string with placeholder and locale
                 String secondsStr = String.format(Locale.US, "%02d", seconds);
                 timerText.setText(getString(R.string.timer_display, secondsStr));
 
-                // Feature: Flashy Background Colors
                 gameContainer.setBackgroundColor(Color.rgb(random.nextInt(256), random.nextInt(256), random.nextInt(256)));
 
-                // Feature: Big Countdown Suspense
                 if (seconds <= 3 && seconds > 0) {
                     bigCountdown.setVisibility(View.VISIBLE);
                     bigCountdown.setText(String.valueOf(seconds));
@@ -177,17 +162,14 @@ public class MainActivity extends AppCompatActivity {
         bottle.clearAnimation();
         bigCountdown.setVisibility(View.GONE);
 
-        // Show Result
+
         resultText.setVisibility(View.VISIBLE);
         triggerConfetti();
 
-        // Stop bottle at random angle
         bottle.setRotation(random.nextInt(360));
     }
 
-    // ==========================================
-    // LOGIC: MENU & EFFECTS
-    // ==========================================
+
     private void showSettingsDialog() {
         String[] options = {"3 Seconds", "5 Seconds", "10 Seconds", "Reset"};
         new AlertDialog.Builder(this)
@@ -203,7 +185,6 @@ public class MainActivity extends AppCompatActivity {
                             break;
                     }
                     if(!isSpinning) {
-                        // Fix: Use resource string and locale
                         String secondsStr = String.format(Locale.US, "%02d", gameDuration/1000);
                         timerText.setText(getString(R.string.timer_display, secondsStr));
                     }
@@ -219,7 +200,7 @@ public class MainActivity extends AppCompatActivity {
                         .shapes(Arrays.asList(Shape.Square.INSTANCE, Shape.Circle.INSTANCE))
                         .colors(Arrays.asList(0xffff00, 0xff0000, 0xff00ff, 0x00ffff))
                         .setSpeedBetween(10f, 30f)
-                        .position(new Position.Relative(0.5, 0.5)) // Center burst
+                        .position(new Position.Relative(0.5, 0.5))
                         .build()
         );
     }
