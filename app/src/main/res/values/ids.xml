@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="gameContainer" type="id"/>
+    <item name="bottleImage" type="id"/>
+    <item name="timerText" type="id"/>
+    <item name="bigCountdownText" type="id"/>
+    <item name="resultText" type="id"/>
+    <item name="konfettiView" type="id"/>
+    <item name="menuButton" type="id"/>
+    <item name="splashOverlay" type="id"/>
+    <item name="splashLogo" type="id"/>
+    <item name="splashText" type="id"/>
+</resources>

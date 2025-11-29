@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name" translatable="false">Spin the bottle</string>
+    <string name="timer_display" translatable="false">00:%1$s</string>
+    <string name="default_timer" translatable="false">00:10</string>
+    <string name="_00_10">00:10</string>
+    <string name="todo">TODO</string>
+    <string name="_3"> 3 </string>
+    <string name="your_turn">YOUR TURN!</string>
+    <string name="loading">Loading...</string>
+    <string name="o">TODO</string>
+    <string name="todoo">TODO</string>
+</resources>
